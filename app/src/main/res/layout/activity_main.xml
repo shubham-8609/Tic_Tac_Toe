@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+
+    tools:context=".MainActivity">
+
+    <GridLayout
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+
+        android:rowCount="3"
+        android:layout_width="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:id="@+id/btn1"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/allerta_stencil"
+            android:onClick="clicked"
+            android:padding="21dp"
+            android:textSize="30sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:padding="21dp"
+            android:onClick="clicked"
+            android:textSize="30sp"
+            android:fontFamily="@font/allerta_stencil"
+            android:id="@+id/btn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:padding="21dp"
+            android:textSize="30sp"
+            android:layout_width="wrap_content"
+            android:fontFamily="@font/allerta_stencil"
+            android:onClick="clicked"
+            android:id="@+id/btn3"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:padding="21dp"
+            android:textSize="30sp"
+            android:fontFamily="@font/allerta_stencil"
+            android:onClick="clicked"
+            android:id="@+id/btn4"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:padding="21dp"
+            android:textSize="30sp"
+            android:fontFamily="@font/allerta_stencil"
+            android:onClick="clicked"
+            android:id="@+id/btn5"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:padding="21dp"
+            android:layout_width="wrap_content"
+            android:textSize="30sp"
+            android:fontFamily="@font/allerta_stencil"
+            android:onClick="clicked"
+            android:id="@+id/btn6"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:padding="21dp"
+            android:layout_width="wrap_content"
+            android:fontFamily="@font/allerta_stencil"
+            android:textSize="30sp"
+            android:onClick="clicked"
+            android:id="@+id/btn7"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:padding="21dp"
+            android:textSize="30sp"
+            android:fontFamily="@font/allerta_stencil"
+            android:onClick="clicked"
+            android:id="@+id/btn8"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:padding="21dp"
+            android:textSize="30sp"
+            android:fontFamily="@font/allerta_stencil"
+            android:onClick="clicked"
+            android:id="@+id/btn9"
+            android:layout_height="wrap_content" />
+    </GridLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/allerta_stencil"
+        android:onClick="reset"
+
+        android:padding="21dp"
+        android:text="Reset"
+        android:textSize="23sp" />
+
+</LinearLayout>
+
