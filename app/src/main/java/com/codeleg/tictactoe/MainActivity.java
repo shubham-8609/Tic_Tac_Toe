@@ -1,9 +1,7 @@
 package com.codeleg.tictactoe;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -15,10 +13,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
-    // Declaring views
-    Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
-    String b1, b2, b3, b4, b5, b6, b7, b8, b9;
-    int state = 0;
+    Button[] btn = new Button[9];
+    char[] board = new char[9]; // Internal game state: 'X', 'O', or '\0' for empty
+    int state = 0; // 0 for X, 1 for O
     int count = 0;
 
     @Override
@@ -31,133 +28,75 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        init(); // Calling init() method to initialize buttons
 
+        init();
+        resetBoardState();
     }
-
 
     private void init() {
-        btn1 = findViewById(R.id.btn1);
-        btn2 = findViewById(R.id.btn2);
-        btn3 = findViewById(R.id.btn3);
-        btn4 = findViewById(R.id.btn4);
-        btn5 = findViewById(R.id.btn5);
-        btn6 = findViewById(R.id.btn6);
-        btn7 = findViewById(R.id.btn7);
-        btn8 = findViewById(R.id.btn8);
-        btn9 = findViewById(R.id.btn9);
-    }
-
-
-    // The onclick method
-    public void clicked(View v) {
-        Button clickedBtn = (Button) v;
-        if (clickedBtn.getText().toString().isEmpty()) {
-            count++;
-
-            if (state == 0) {
-                clickedBtn.setText("X");
-                state = 1;
-            } else {
-                clickedBtn.setText("O");
-                state = 0;
-            }
-
-
-            if (count > 4) {
-                //Ensure buttons are initialized before accessing them
-                b1 = btn1.getText().toString();
-                b2 = btn2.getText().toString();
-                b3 = btn3.getText().toString();
-                b4 = btn4.getText().toString();
-                b5 = btn5.getText().toString();
-                b6 = btn6.getText().toString();
-                b7 = btn7.getText().toString();
-                b8 = btn8.getText().toString();
-                b9 = btn9.getText().toString();
-
-                // Conditions
-
-                if (b1.equals(b2) && b2.equals(b3) && !b1.equals("")) {
-                    reset();
-
-                    Toast.makeText(this, "Winner is : " + b1, Toast.LENGTH_SHORT).show();
-                } else if (b4.equals(b5) && b5.equals(b6) && !b4.equals("")) {
-                    reset();
-
-                    Toast.makeText(this, "Winner is : " + b4, Toast.LENGTH_SHORT).show();
-
-                } else if (b7.equals(b8) && b8.equals(b9) && !b7.equals("")) {
-                    reset();
-                    // 3.
-                    Toast.makeText(this, "Winner is : " + b7, Toast.LENGTH_SHORT).show();
-                } else if (b1.equals(b4) && b4.equals(b7) && !b1.equals("")) {
-                    reset();
-
-                    // 4.
-                    Toast.makeText(this, "Winner is : " + b1, Toast.LENGTH_SHORT).show();
-
-                } else if (b2.equals(b5) && b5.equals(b8) && !b2.equals("")) {
-                    reset();
-                    //5.
-                    Toast.makeText(this, "Winner is : " + b2, Toast.LENGTH_SHORT).show();
-                } else if (b3.equals(b6) && b6.equals(b9) && !b3.equals("")) {
-
-                    reset();
-
-                    //6.
-                    Toast.makeText(this, "Winner is : " + b3, Toast.LENGTH_SHORT).show();
-                } else if (b1.equals(b5) && b5.equals(b9) && !b1.equals("")) {
-                    reset();
-                    // 7.
-                    Toast.makeText(this, "Winner is : " + b1, Toast.LENGTH_SHORT).show();
-                } else if (b3.equals(b5) && b5.equals(b7) && !b3.equals("")) {
-                    reset();
-
-                    //8.
-                    Toast.makeText(this, "Winner is : " + b3, Toast.LENGTH_SHORT).show();
-                } else if (count == 9) {
-                    Toast.makeText(this, "The Game is Drawn", Toast.LENGTH_SHORT).show();
-                    reset();
-                }
-
-
-            }
-
-
+        int[] ids = {
+                R.id.btn1, R.id.btn2, R.id.btn3,
+                R.id.btn4, R.id.btn5, R.id.btn6,
+                R.id.btn7, R.id.btn8, R.id.btn9
+        };
+        for (int i = 0; i < btn.length; i++) {
+            btn[i] = findViewById(ids[i]);
+            int finalI = i;
+            btn[i].setOnClickListener(v -> clicked(finalI));
         }
     }
 
-    public void reset() {
-        // Implementing vibration
-        new Handler().postDelayed(new Runnable() {
-                                      @Override
-                                      public void run() {
+    private void clicked(int index) {
+        if (board[index] == '\0') { // empty
+            count++;
+            board[index] = (state == 0) ? 'X' : 'O';
+            btn[index].setText(String.valueOf(board[index]));
+            state = 1 - state; // toggle player
 
-                                          btn1.setText("");
-                                          btn2.setText("");
-                                          btn3.setText("");
-                                          btn4.setText("");
-                                          btn5.setText("");
-                                          btn6.setText("");
-                                          btn7.setText("");
-                                          btn8.setText("");
-                                          btn9.setText("");
-
-                                          count = 0;
-                                          state = 0;
-                                      }
-                                  } , 400);
-
-
-
-
-
-    }
-    public void reset(View v){
-        reset();
-        Toast.makeText(this, "Game Reset " , Toast.LENGTH_SHORT).show();
+            if (count >= 5) {
+                if (checkWinner()) {
+                    Toast.makeText(this, "Winner is : " + board[index], Toast.LENGTH_SHORT).show();
+                    resetDelayed();
+                } else if (count == 9) {
+                    Toast.makeText(this, "The Game is Drawn", Toast.LENGTH_SHORT).show();
+                    resetDelayed();
+                }
+            }
+        }
     }
 
+    private boolean checkWinner() {
+        int[][] winConditions = {
+                {0,1,2}, {3,4,5}, {6,7,8}, // rows
+                {0,3,6}, {1,4,7}, {2,5,8}, // columns
+                {0,4,8}, {2,4,6}           // diagonals
+        };
 
+        for (int[] wc : winConditions) {
+            if (board[wc[0]] != '\0' &&
+                    board[wc[0]] == board[wc[1]] &&
+                    board[wc[1]] == board[wc[2]]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void resetBoardState() {
+        for (int i = 0; i < board.length; i++) {
+            board[i] = '\0';
+            btn[i].setText("");
+        }
+        count = 0;
+        state = 0;
+    }
+
+    private void resetDelayed() {
+        new Handler().postDelayed(this::resetBoardState, 400);
+    }
+
+    public void reset(View v) {
+        resetBoardState();
+        Toast.makeText(this, "Game Reset", Toast.LENGTH_SHORT).show();
+    }
 }
