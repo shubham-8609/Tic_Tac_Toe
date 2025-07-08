@@ -8,6 +8,8 @@ import android.os.VibrationEffect;
 import android.os.Vibrator; // Import the Vibrator class
 import android.os.VibratorManager; // Import VibratorManager for newer Android versions
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     int count = 0;
     Boolean isGameOver;
     Vibrator vibrator;
+    Animation clickAnim ;
+    Animation invisibleAnime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +51,14 @@ public class MainActivity extends AppCompatActivity {
                 R.id.btn4, R.id.btn5, R.id.btn6,
                 R.id.btn7, R.id.btn8, R.id.btn9
         };
+        clickAnim = AnimationUtils.loadAnimation(this , R.anim.button_anim);
+        invisibleAnime = AnimationUtils.loadAnimation(this , R.anim.alpha_anim);
         for (int i = 0; i < btn.length; i++) {
             btn[i] = findViewById(ids[i]);
             int finalI = i;
             btn[i].setOnClickListener(v -> clicked(finalI));
-            isGameOver = false;
         }
+            isGameOver = false;
         resetBtn = findViewById(R.id.resetBtn);
         // Get the Vibrator service
         // For Android versions 12 (API level 31) and above, VibratorManager should be used.
@@ -71,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             count++;
             board[index] = (state == 0) ? 'X' : 'O';
             btn[index].setText(String.valueOf(board[index]));
+            btn[index].startAnimation(clickAnim);
             state = 1 - state; // toggle player
 
             if (count >= 5) {
@@ -123,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
     public void reset(View v) {
         resetBoardState();
         Toast.makeText(this, "Game Reset", Toast.LENGTH_SHORT).show();
+        vibrate(100);
+        resetBtn.startAnimation(invisibleAnime);
     }
 
     public void vibrate( int time){
@@ -131,5 +140,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             vibrator.vibrate(time); // for older devices
         }
+
     }
 }
