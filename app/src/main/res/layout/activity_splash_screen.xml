@@ -10,11 +10,19 @@
     tools:context=".SplashScreen">
 
 
-    <ImageView
-        android:layout_width="270dp"
+<!--    <ImageView-->
+<!--        android:layout_width="270dp"-->
+<!--        android:layout_height="300dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:src="@drawable/tictactoe2" />-->
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_gravity="center"
-        android:src="@drawable/tictactoe2" />
+        app:lottie_rawRes="@raw/starting_animation"
+        app:lottie_autoPlay="true"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
